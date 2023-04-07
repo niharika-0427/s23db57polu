@@ -1,0 +1,16 @@
+extends layout
+block content
+  div(class="container-fluid")
+    h1= title
+  - let results=[{author:"Maya Angelou",text:"I've learned",year:1970},{author:"Winston Churchill",text:"Success.",year:1941},{author:"Albert Einstein",text:"Try",year:1934}] 
+    div(class="row")
+      each form,index in results
+        div(class = "col-sm-2 bg-success" onclick=`buy(${index})`) #{form.author}
+        div(class = "col-sm-2 bg-success" onclick=`buy(${index})`) #{form.text}
+        div(class = "col-sm-2 bg-success" onclick=`buy(${index})`) #{form.year}
+        hr
+    script.     
+      function buy(itemNo)
+      {
+        alert(`You purchased Item ${itemNo+1}`)
+      }
