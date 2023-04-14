@@ -1,9 +1,6 @@
 var express = require('express');
+const quotes_controlers= require('../controllers/quotes');
 var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('quotes', { title: 'Search result' });
-});
-
+/* GET quotes */
+router.get('/', quotes_controlers.quotes_view_all_Page );
 module.exports = router;
