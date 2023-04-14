@@ -65,3 +65,33 @@ exports.quotes_create_post = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
     };
+    // for a specific quotes.
+exports.quotes_detail = async function(req, res) {
+console.log("detail" + req.params.id)
+try {
+result = await quotes.findById( req.params.id)
+res.send(result)
+} catch (error) {
+res.status(500)
+res.send(`{"error": document for id ${req.params.id} not found`);
+}
+};
+exports.quotes_update_put = async function(req, res) {
+    console.log(`update on id ${req.params.id} with body
+    ${JSON.stringify(req.body)}`)
+    try {
+    let toUpdate = await quotes.findById( req.params.id)
+    // Do updates of properties
+    if(req.body.quotes_type)
+    toUpdate.quotes_type = req.body.quotes_type;
+    if(req.body.cost) toUpdate.cost = req.body.cost;
+    if(req.body.size) toUpdate.size = req.body.size;
+    let result = await toUpdate.save();
+    console.log("Sucess " + result)
+    res.send(result)
+    } catch (err) {
+    res.status(500)
+    res.send(`{"error": ${err}: Update for id ${req.params.id}
+    failed`);
+    }
+    };
