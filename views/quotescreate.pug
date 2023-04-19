@@ -1,0 +1,28 @@
+extends layout
+block content
+ h1= title
+ form(id='quotesForm', action="/resource/quotes", method="POST")
+  div.form-group
+   label.quotesAttr(for='quotes_type') quote
+   input#quotes_type(type='text', name='quotes_type')
+  div.form-group
+   label.quotesAttr(for='text') text 
+   input#text(type='text', name='text')
+  div.form-group
+   label.quotesAttr(for='year') year 
+   input#year(type='text', name='year')
+  input(type="submit")
+ script.
+  document.forms['quotesForm'].addEventListener('submit', (event) => {
+    event.preventDefault();
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) 
+    }).then((resp) => {
+        return resp.json();
+    }).then((body) => {
+        alert("Save succeded")
+    }).catch((error) => {
+        alert("Save failed " + error )
+    });
+   });

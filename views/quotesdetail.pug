@@ -1,0 +1,27 @@
+extends layout
+
+block content
+ h1= title
+
+  if(toShow == null)
+    h2 No instance to detail
+  else
+    - let quotesid = toShow._id
+    - let quotes_type = toShow.quotes_type
+    - let text = toShow.text 
+    - let year = toShow.year
+    - let actionid = "/resource/quotes/" + quotesid
+    script let actionid = "#{actionid}"
+    div
+    div.row
+    div(class='quotesAttr mr-3') quotes ID is: 
+       div #{quotesid}
+    div.row
+    div(class='quotesAttr mr-3') quotes is: 
+       div #{quotes_type}
+    div.row
+    div(class='quotesAttr mr-3') text is: 
+       div #{text}
+    div.row
+    div(class='quotesAttr mr-3') year is:
+      div #{year}

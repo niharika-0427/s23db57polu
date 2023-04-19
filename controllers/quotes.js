@@ -52,10 +52,10 @@ exports.quotes_create_post = async function(req, res) {
     // We are looking for a body, since POST does not have query parameters.
     // Even though bodies can be in many different formats, we will be picky
     // and require that it be a json object
-    // {"quotes_type":"goat", "cost":12, "size":"large"}
+    // {"quotes_type":"goat", "text":12, "year":"large"}
     document.quotes_type = req.body.quotes_type;
-    document.cost = req.body.cost;
-    document.size = req.body.size;
+    document.text = req.body.text;
+    document.year = req.body.year;
     try{
     let result = await document.save();
     res.send(result);
@@ -84,8 +84,8 @@ exports.quotes_update_put = async function(req, res) {
     // Do updates of properties
     if(req.body.quotes_type)
     toUpdate.quotes_type = req.body.quotes_type;
-    if(req.body.cost) toUpdate.cost = req.body.cost;
-    if(req.body.size) toUpdate.size = req.body.size;
+    if(req.body.text) toUpdate.text = req.body.text;
+    if(req.body.year) toUpdate.year = req.body.year;
     let result = await toUpdate.save();
     console.log("Sucess " + result)
     res.send(result)
@@ -93,5 +93,69 @@ exports.quotes_update_put = async function(req, res) {
     res.status(500)
     res.send(`{"error": ${err}: Update for id ${req.params.id}
     failed`);
+    }
+    };
+// Handle quotes delete on DELETE.
+exports.quotes_delete = async function(req, res) {
+    console.log("delete " + req.params.id)
+    try {
+    result = await quotes.findByIdAndDelete( req.params.id)
+    console.log("Removed " + result)
+    res.send(result)
+    } catch (err) {
+    res.status(500)
+    res.send(`{"error": Error deleting ${err}}`);
+    }
+    };
+// Handle a show one view with id specified by query
+exports.quotes_view_one_Page = async function(req, res) {
+    console.log("single view for id " + req.query.id)
+    try{
+    result = await quotes.findById( req.query.id)
+    res.render('quotesdetail',
+    { title: 'quotes Detail', toShow: result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+    };
+// Handle building the view for creating a quotes.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.quotes_create_Page = function(req, res) {
+    console.log("create view")
+    try{
+    res.render('quotescreate', { title: 'quotes Create'});
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+    };
+// Handle building the view for updating a quotes.
+// query provides the id
+exports.quotes_update_Page = async function(req, res) {
+    console.log("update view for item "+req.query.id)
+    try{
+    let result = await quotes.findById(req.query.id)
+    res.render('quotesupdate', { title: 'quotes Update', toShow: result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
+    }
+    };
+// Handle a delete one view with id from query
+exports.quotes_delete_Page = async function(req, res) {
+    console.log("Delete view for id " + req.query.id)
+    try{
+    result = await quotes.findById(req.query.id)
+    res.render('quotesdelete', { title: 'quotes Delete', toShow:
+    result });
+    }
+    catch(err){
+    res.status(500)
+    res.send(`{'error': '${err}'}`);
     }
     };
