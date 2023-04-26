@@ -5,6 +5,14 @@ var router = express.Router();
 router.get('/', quotes_controlers.quotes_view_all_Page );
 router.get('/detail', quotes_controlers.quotes_view_one_Page);
 router.get('/create', quotes_controlers.quotes_create_Page);
+const secured = (req, res, next) => {
+    if (req.user){
+    return next();
+    }
+    req.session.returnTo = req.originalUrl;
+    res.redirect("/login");
+    }
+
 router.get('/update', quotes_controlers.quotes_update_Page);
 router.get('/delete', quotes_controlers.quotes_delete_Page);
 module.exports = router;
